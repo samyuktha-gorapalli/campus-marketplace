@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sign Up - Campus Marketplace</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav><h1>Campus Marketplace</h1></nav>
+    <main>
+        <div class="form-container">
+            <h2>Create Account</h2>
+            <p class="subtitle">Only college emails are accepted</p>
+            <div id="error" class="error-msg" style="display:none"></div>
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="name" placeholder="e.g. Sammy">
+            </div>
+            <div class="form-group">
+                <label>College Email</label>
+                <input type="email" id="email" placeholder="you@woxsen.edu.in">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" placeholder="••••••••">
+                    <span onclick="togglePassword()" id="eye">👁</span>
+                </div>
+            </div>
+            <button onclick="submitSignup()">Create Account</button>
+            <p class="switch">Already have an account? <a href="/login">Login</a></p>
+        </div>
+    </main>
+    <script>
+        function togglePassword() {
+            const input = document.getElementById('password');
+            const eye = document.getElementById('eye');
+            if (input.type === 'password') {
+                input.type = 'text';
+                eye.textContent = '🙈';
+            } else {
+                input.type = 'password';
+                eye.textContent = '👁';
+            }
+        }
+
+        async function submitSignup() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const res = await fetch('/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password })
+            });
+            const data = await res.json();
+            if (res.ok) {
+                window.location.href = '/login';
+            } else {
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = data.error;
+            }
+        }
+    </script>
+</body>
+</html>

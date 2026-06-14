@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Profile - Campus Marketplace</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav>
+        <h1>Campus Marketplace</h1>
+        <div class="nav-right">
+            <a href="/">← Home</a>
+            <a href="/logout" class="logout">Logout</a>
+        </div>
+    </nav>
+    <main>
+        <div class="profile-container">
+            <div class="profile-card">
+                <div class="profile-avatar">{{ user['name'][0].upper() }}</div>
+                <h2>{{ user['name'] }}</h2>
+                <p class="profile-email">{{ user['email'] }}</p>
+
+                <div id="view-mode">
+                    <p class="profile-bio">{{ user['bio'] if user['bio'] else 'No bio yet' }}</p>
+                    <p class="profile-phone">{{ '📞 ' + user['phone'] if user['phone'] else '' }}</p>
+                    <button onclick="toggleEdit()">Edit Profile</button>
+                </div>
+
+                <div id="edit-mode" style="display:none;">
+                    <div class="form-group">
+                        <label>Bio</label>
+                        <textarea id="bio" placeholder="Tell people about yourself...">{{ user['bio'] if user['bio'] else '' }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone / WhatsApp</label>
+                        <input type="text" id="phone" placeholder="e.g. +91 9876543210" value="{{ user['phone'] if user['phone'] else '' }}">
+                    </div>
+                    <button onclick="saveProfile()">Save</button>
+                    <button onclick="toggleEdit()" style="background:#999; margin-top:0.5rem;">Cancel</button>
+                </div>
+            </div>
+
+            <div class="profile-listings">
+                <h3>Your Listings ({{ listings|length }})</h3>
+                {% if listings %}
+                <div class="grid">
+                    {% for listing in listings %}
+                    <div class="card">
+                        {% if listing['image'] %}
+                        <img src="/static/uploads/{{ listing['image'] }}" class="card-img">
+                        {% else %}
+                        <div class="card-no-img">No Image</div>
+                        {% endif %}
+                        <div class="card-body">
+                            <span class="category">{{ listing['category'] }}</span>
+                            <h3>{{ listing['title'] }}</h3>
+                            <p>{{ listing['description'] }}</p>
+                            <p class="price">₹{{ listing['price'] }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty">
+                    <p>You haven't posted anything yet!</p>
+                    <a href="/post">Post your first item</a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+    <script>
+        function toggleEdit() {
+            const view = document.getElementById('view-mode');
+            const edit = document.getElementById('edit-mode');
+            view.style.display = view.style.display === 'none' ? 'block' : 'none';
+            edit.style.display = edit.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function saveProfile() {
+            const bio = document.getElementById('bio').value;
+            const phone = document.getElementById('phone').value;
+            const res = await fetch('/api/profile', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ bio, phone })
+            });
+            if (res.ok) {
+                window.location.reload();
+            }
+        }
+    </script>
+</body>
+</html>

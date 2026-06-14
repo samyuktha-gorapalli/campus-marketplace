@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Campus Marketplace</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav>
+        <h1>Campus Marketplace</h1>
+        <div class="nav-right">
+            <a href="/profile">👤 {{ user }}</a>
+            <a href="/inbox">💬 Inbox</a>
+            <a href="/post">+ Post Item</a>
+            <a href="/logout" class="logout">Logout</a>
+        </div>
+    </nav>
+    <main>
+        <h2>Latest Listings</h2>
+        {% if listings %}
+        <div class="grid">
+            {% for listing in listings %}
+            <div class="card">
+                {% if listing['image'] %}
+                <img src="/static/uploads/{{ listing['image'] }}" class="card-img">
+                {% else %}
+                <div class="card-no-img">No Image</div>
+                {% endif %}
+                <div class="card-body">
+                    <span class="category">{{ listing['category'] }}</span>
+                    <h3>{{ listing['title'] }}</h3>
+                    <p>{{ listing['description'] }}</p>
+                    <p class="price">₹{{ listing['price'] }}</p>
+                    <p class="seller">👤 {{ listing['seller'] }}</p>
+                    {% if listing['seller'] != user %}
+                    <a class="contact-btn" href="/chat/start/{{ listing['id'] }}">Contact Seller</a>
+                    {% else %}
+                    <span class="your-listing">Your listing</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty">
+            <p>No listings yet!</p>
+            <a href="/post">Be the first to post an item</a>
+        </div>
+        {% endif %}
+    </main>
+</body>
+</html>

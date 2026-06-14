@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inbox - Campus Marketplace</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav>
+        <h1>Campus Marketplace</h1>
+        <div class="nav-right">
+            <a href="/">← Home</a>
+            <a href="/logout" class="logout">Logout</a>
+        </div>
+    </nav>
+    <main>
+        <h2 style="margin-bottom:1.5rem;">Your Inbox</h2>
+        {% if chats %}
+        <div class="inbox-list">
+            {% for chat in chats %}
+            <a href="/chat/{{ chat['id'] }}" class="inbox-item">
+                <div class="inbox-avatar">💬</div>
+                <div class="inbox-info">
+                    <h3>{{ chat['seller'] if user == chat['buyer'] else chat['buyer'] }}</h3>
+                    <p>{{ chat['listing_title'] }}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty">
+            <p>No conversations yet!</p>
+            <a href="/">Browse listings</a>
+        </div>
+        {% endif %}
+    </main>
+</body>
+</html>

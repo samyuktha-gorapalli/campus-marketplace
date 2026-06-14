@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Post an Item</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <nav>
+        <h1>Campus Marketplace</h1>
+        <a href="/">← Back</a>
+    </nav>
+    <main>
+        <div class="form-container">
+            <h2>Post an Item</h2>
+            <div id="error" class="error-msg" style="display:none"></div>
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" id="title" placeholder="e.g. Calculus Textbook">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="description" placeholder="Describe your item..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Price (₹)</label>
+                <input type="number" id="price" placeholder="e.g. 300">
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select id="category">
+                    <option>Books</option>
+                    <option>Electronics</option>
+                    <option>Clothing</option>
+                    <option>Stationery</option>
+                    <option>Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Photo (optional)</label>
+                <input type="file" id="image" accept="image/*">
+                <div id="preview-wrapper" style="display:none; margin-top:10px;">
+                    <img id="preview" style="max-width:100%; border-radius:8px;">
+                </div>
+            </div>
+            <button onclick="submitListing()">Post Item</button>
+        </div>
+    </main>
+    <script>
+        document.getElementById('image').addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview').src = e.target.result;
+                    document.getElementById('preview-wrapper').style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+
+        async function submitListing() {
+            const formData = new FormData();
+            formData.append('title', document.getElementById('title').value);
+            formData.append('description', document.getElementById('description').value);
+            formData.append('price', document.getElementById('price').value);
+            formData.append('category', document.getElementById('category').value);
+            const imageFile = document.getElementById('image').files[0];
+            if (imageFile) {
+                formData.append('image', imageFile);
+            }
+            const res = await fetch('/api/listings', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await res.json();
+            if (res.ok) {
+                window.location.href = '/';
+            } else {
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('error').textContent = data.error;
+            }
+        }
+    </script>
+</body>
+</html>
