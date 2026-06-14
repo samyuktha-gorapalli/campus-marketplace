@@ -53,6 +53,18 @@ python3 app.py
 - Email notifications for new messages
 - Mark items as sold
 
+## Contributing
+
+This project is open to collaboration! If you have ideas for new features, improvements, or bug fixes, feel free to:
+
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature/your-idea`)
+3. Commit your changes (`git commit -m "Add your idea"`)
+4. Push to the branch (`git push origin feature/your-idea`)
+5. Open a Pull Request
+
+Or simply reach out to me directly — always happy to connect with fellow developers and students!
+
 ## Author
 
 Samyuktha Gorapalli — [GitHub](https://github.com/samyuktha-gorapalli)
