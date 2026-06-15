@@ -47,7 +47,6 @@ python3 app.py
 
 ## Future Features
 
-- Search and filter listings by category and price
 - Delete and edit your own listings
 - Price estimator using machine learning
 - Email notifications for new messages
